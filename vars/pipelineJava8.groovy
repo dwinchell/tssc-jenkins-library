@@ -7,7 +7,8 @@ def call(
   sonarqubeCredentialsId,
   argocdCredentialsId,
   artifactRepoCredentialsId,
-  applicationName
+  applicationName,
+  registrySecretName
 ) {
 
   String JENKINS_WORKER_IMAGE_JNLP    = 'quay.io/tssc/tssc-ci-agent-jenkins:latest'
@@ -16,7 +17,6 @@ def call(
   String JENKINS_WORKER_IMAGE_ARGOCD  = 'quay.io/tssc/tssc-tool-argocd:latest'
   String JENKINS_WORKER_IMAGE_SKOPEO  = 'quay.io/tssc/tssc-tool-skopeo:latest'
   String JENKINS_WORKER_IMAGE_SONAR   = 'quay.io/tssc/tssc-tool-sonar:latest'
-  String REGISTRY_SECRET_NAME         = 'quay-basic-auth'
 
   pipeline {
 
@@ -66,7 +66,7 @@ def call(
     - name: quay-registry-secret
       secret:
         defaultMode: 440
-        secretName: ${REGISTRY_SECRET_NAME}
+        secretName: ${registrySecretName}
         items:
         - key: .dockerconfigjson
           path: .docker/config.json
